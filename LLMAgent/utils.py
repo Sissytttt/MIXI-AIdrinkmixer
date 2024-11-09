@@ -1,6 +1,14 @@
 from letta import create_client 
 client = create_client()
 
+
+def agent_exist(agent_name):
+    agents = client.list_agents() 
+    for agent in agents:
+        if agent.name == agent_name:
+            return True
+    else:
+        return False
 def print_agent(agent_name):
     agents = client.list_agents() 
     for agent in agents:
@@ -77,5 +85,5 @@ get_agents()
 # print("------------------------------------------------------")
 # get_mem("test1")
 # print("------------------------------------------------------")
-print("default system instruction: ")
-get_system("MIXI")
+# print("default system instruction: ")
+# get_system("MIXI")
