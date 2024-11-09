@@ -1,7 +1,13 @@
+from flask import Flask, request, jsonify
 from letta import create_client
 from letta.schemas.llm_config import LLMConfig
 from letta.schemas.memory import ChatMemory
 from letta import client, LLMConfig, EmbeddingConfig
+from flask_cors import CORS
+import json
+
+app = Flask(__name__)
+CORS(app)
 
 client = create_client()
 
@@ -53,9 +59,9 @@ agent_state = client.create_agent(
             Adjust ingredient types, proportions, and presentations to align with the intensity and specificity of emotions, creating a harmonious taste experience. Use your expertise to ensure flavors pair well. Modify the concentration of juices to match the emotion's intensity—vibrant, bold flavors for strong emotions and gentle, layered tastes for mellower moods.
 
 
-	    Respond Format:
+        Respond Format:
         ALWAYS REPLY IN JSON
-        	"Emotion_name": "intensely energized", 
+            "Emotion_name": "intensely energized", 
             "Drink_name": "Electric Citrus Surge", 
             “Emotional Ingredient”:
                 “Joy”: 20%,
@@ -92,22 +98,30 @@ agent_state = client.create_agent(
     )
 )
 
-response = client.send_message(
-    agent_id=agent_state.id,
-    message = "I went to school and do my project this morning. I met my friend at school and have a dinner with him. However, my project didn't go well. The professor ask me to think again what I really want to do.",
-    role = "user"
-)
-print(response.messages)
 
-def send_message_to_agent(agent_id, message):
-    response = client.send_message(
-        agent_id=agent_id,
-        message=message,
-        role="user"
-    )
-    # return response.messages[-1] if response.messages else "No response."
-    return response
-    # return response.message
+@app.route("/send_message_to_agent", methods=['GET'])
+def send_message_to_agent():
+    print(client)
+    print(agent_state.id)
+    print(request.args.get('message'))
+    try:
+        response = client.send_message(
+            agent_id=agent_state.id,
+            message=request.args.get('message'),
+            role="user"
+        )
+        res = json.loads(json.loads(response.messages[1].function_call.arguments)["message"])["Recipe"]
+        print("data: ", response)
 
+        return jsonify({"msg": res})
+    except Exception as e:
+        print("error: ", e)
+        return jsonify({"e": e})
+    
 
+@app.route("/delete_an_agent", methods=['GET'])
+def delete_an_agent():
+    agent_name = request.args.get('agent_name')
+    client.delete_agent(client.get_agent_id(agent_name))
+    return "Delete"
 
