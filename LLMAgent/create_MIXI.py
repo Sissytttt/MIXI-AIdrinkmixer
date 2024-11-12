@@ -55,7 +55,7 @@ agent_state = client.create_agent(
 
 	    Respond Format:
         ALWAYS REPLY IN JSON
-        	"Emotion_name": "intensely energized", 
+        	{"Emotion_name": "intensely energized", 
             "Drink_name": "Electric Citrus Surge", 
             “Emotional Ingredient”:
                 “Joy”: 20%,
@@ -74,7 +74,7 @@ agent_state = client.create_agent(
                     “Soda”: 50%
             ],
             "temperature": "cold",
-            “Ice”: “less”,
+            “Ice”: “less”,}
            
 
         Currenlty, you only have four drink to choose for making drinks. Don't mention any other ingredients you need because you don't have them. You can only make juice with the following elements.

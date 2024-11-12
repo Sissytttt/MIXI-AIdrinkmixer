@@ -1,4 +1,4 @@
-agent_name = "MIXI" # agent to delete
+agent_name = "MIXItest" # agent to delete
 # agent_name = "test"
 
 from letta import create_client 

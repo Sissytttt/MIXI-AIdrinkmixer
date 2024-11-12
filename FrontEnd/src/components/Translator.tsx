@@ -3,6 +3,9 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
+import './styles.css';
+
+
 const useSpeechRecognition = () => {
     const [text, setText] = useState(""); // Holds the current displayed text
     const [recipe, setRecipe] = useState(""); // Holds the current displayed text
@@ -33,15 +36,15 @@ const useSpeechRecognition = () => {
             console.log("text: ", _result)
             console.log("1: ", encodeURIComponent(_result))
 
-            fetch('http://127.0.0.1:5000/send_message_to_agent?message='+encodeURIComponent(_result))
-              .then(response => response.json())
-              .then(data => {
-                console.log("d: ", data);
-                var _data = "";
-                console.log("d1: ", data.msg["ingredients"]);
-                (data.msg["ingredients"]).map(d => {_data += Object.keys(d)[0] + d[Object.keys(d)[0]]})
-                setRecipe(_data)
-              });
+            fetch('http://127.0.0.1:5000/send_message_to_agent?message=' + encodeURIComponent(_result))
+                .then(response => response.json())
+                .then(data => {
+                    console.log("d: ", data);
+                    var _data = "";
+                    console.log("d1: ", data.msg["ingredients"]);
+                    (data.msg["ingredients"]).map(d => { _data += Object.keys(d)[0] + d[Object.keys(d)[0]] })
+                    setRecipe(_data)
+                });
         };
 
         recognition.onerror = (event) => {
@@ -66,19 +69,27 @@ const useSpeechRecognition = () => {
 const Translator = () => {
     const { recipe, text, isListening, setIsListening } = useSpeechRecognition();
 
+    const buttonClass = isListening ? "button active" : "button";
+
+    const buttonText = isListening ? "Stop Listening" : "Start Listening";
+
     return (
-        <div>
-            <button onClick={() => {setIsListening(!isListening)}}>
-                {isListening ? "Stop Listening" : "Start Listening"}
+        <div className={`translator-container ${isListening ? 'listening' : ''}`}>
+            <button
+                className={buttonClass}
+                onClick={() => { setIsListening(!isListening) }}
+            >
+                {buttonText}
             </button>
-            <div>
-                <h3>Recognized Text:</h3>
-                <p>{text}</p>
-                <p>{recipe}</p>
+            <div className="text-container">
+                <h3 className="recognized-text-title">Recognized Text:</h3>
+                <p className="recognized-text">{text}</p>
+                <p className="recipe-text">{recipe}</p>
             </div>
         </div>
     );
 };
+
 
 export default Translator;
 
