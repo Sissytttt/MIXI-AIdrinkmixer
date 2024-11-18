@@ -92,16 +92,16 @@ APPENDIX:
     "Emotion_name": "intensely energized",
     "Drink_name": "Electric Citrus Surge",
     "Emotional_Ingredient": [
-        {{"Joy": "20%"}},
-        {{"Excitement": "30%"}},
-        {{"Arousal": "20%"}},
-        {{"Astonished": "15%"}},
-        {{"Nervous": "10%"}},
-        {{"Annoyance": "5%"}}
+        {{"Joy": {{{{"polar_angel": 50}}, {{"percentage": "20%"}}}},
+        {{"Excitement": {{{{"polar_angel": 60}}, {{"percentage": "30%"}}}},
+        {{"Arousal": {{{{"polar_angel": 90}}, {{"percentage": "20%"}}}},
+        {{"Astonished": {{{{"polar_angel": 85}}, {{"percentage": "15%"}}}},
+        {{"Nervous": {{{{"polar_angel": 150}}, {{"percentage": "10%"}}}},
+        {{"Annoyance": {{{{"polar_angel": 120}}, {{"percentage": "5%"}}}}
     ],
-    "Polar_coordinate": [
+    "Overall_Polar_coordinate": [
         {{"Polar_angle": 76}},
-        {{"Pole": 0.90}}
+        {{"Percentage": 0.90}}
     ],
     "Recipe": {{
         "Ingredients": [
@@ -129,9 +129,9 @@ Reference Recipe:
     [
     {{
         "Emotion": "Pleasant",
-        "Polar_coordinate": [
+        "Overall_Polar_coordinate": [
             {{ "Polar_angle": 76 }},
-            {{ "Pole": 0.90 }}
+            {{ "Percentage": 0.90 }}
         ],
         "Recipe": {{
             "Ingredients": [
@@ -142,9 +142,9 @@ Reference Recipe:
     }},
     {{
         "Emotion": "Happy",
-        "Polar_coordinate": [
+        "Overall_Polar_coordinate": [
             {{ "Polar_angle": 45 }},
-            {{ "Pole": 1 }}
+            {{ "Percentage": 1 }}
         ],
         "Recipe": {{
             "Ingredients": [
@@ -155,9 +155,9 @@ Reference Recipe:
     }},
     {{
         "Emotion": "Activation",
-        "Polar_coordinate": [
+        "Overall_Polar_coordinate": [
             {{ "Polar_angle": 90 }},
-            {{ "Pole": 1 }}
+            {{ "Percentage": 1 }}
         ],
         "Recipe": {{
             "Ingredients": [
@@ -168,9 +168,9 @@ Reference Recipe:
     }},
     {{
         "Emotion": "Angry",
-        "Polar_coordinate": [
+        "Overall_Polar_coordinate": [
             {{ "Polar_angle": 135 }},
-            {{ "Pole": 1 }}
+            {{ "Percentage": 1 }}
         ],
         "Recipe": {{
             "Ingredients": [
@@ -181,9 +181,9 @@ Reference Recipe:
     }},
     {{
         "Emotion": "Unpleasant",
-        "Polar_coordinate": [
+        "Overall_Polar_coordinate": [
             {{ "Polar_angle": 180 }},
-            {{ "Pole": 1 }}
+            {{ "Percentage": 1 }}
         ],
         "Recipe": {{
             "Ingredients": [
@@ -194,9 +194,9 @@ Reference Recipe:
     }},
     {{
         "Emotion": "Depressed",
-        "Polar_coordinate": [
+        "Overall_Polar_coordinate": [
             {{ "Polar_angle": 202 }},
-            {{ "Pole": 1 }}
+            {{ "Percentage": 1 }}
         ],
         "Recipe": {{
             "Ingredients": [
@@ -207,9 +207,9 @@ Reference Recipe:
     }},
     {{
         "Emotion": "Deactivation",
-        "Polar_coordinate": [
+        "Overall_Polar_coordinate": [
             {{ "Polar_angle": 270 }},
-            {{ "Pole": 1 }}
+            {{ "Percentage": 1 }}
         ],
         "Recipe": {{
             "Ingredients": [
@@ -219,9 +219,9 @@ Reference Recipe:
     }},
     {{
         "Emotion": "Satisfied",
-        "Polar_coordinate": [
+        "Overall_Polar_coordinate": [
             {{ "Polar_angle": 337 }},
-            {{ "Pole": 1 }}
+            {{ "Percentage": 1 }}
         ],
         "Recipe": {{
             "Ingredients": [

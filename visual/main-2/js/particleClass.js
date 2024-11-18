@@ -166,10 +166,10 @@ class Circle {
         this.pos = createVector(x, y, z);
         return this;
     }
-    set_color(r, g, b) {
-        this.color.r = r;
-        this.color.g = g;
-        this.color.b = b;
+    set_color(color) {
+        this.color.r = color[0];
+        this.color.g = color[1];
+        this.color.b = color[2];
         return this;
     }
     set_baseRad(r) {

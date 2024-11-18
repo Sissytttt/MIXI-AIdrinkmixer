@@ -1,9 +1,8 @@
 let earth_params = {
-  BendMagnitude: 30,
   sizeMin: 30,
   sizeMax: 60,
-  breathAmplMin: 30,
-  breathAmplMax: 100,
+  breathAmplMin: 5,
+  breathAmplMax: 10,
   breathFreq: 0.02,
   gaussianSD: 10,
   moveRangeMin: 100,
@@ -137,14 +136,16 @@ function emotion_at(angle, distance, percentage) {
   angle = radians(angle)
   let x = mCos(angle) * distance * 150 * 2;
   let y = mSin(angle) * distance * 150 * 2;
-  let z = map(percentage, 0, 1, -200, 200)
-  let r = 50;
-  setup_circle(x, y, z, r);
+  let z = 0;
+  let r = 30;
+  let hue = map(angle, 0, TWO_PI, 0, 360);
+  let rgbColor = hslToRgb(hue, 1, 0.5);
+  setup_circle(x, y, z, r, rgbColor);
 }
 
-function setup_circle(centerX, centerY, centerZ, Rad) {
+function setup_circle(centerX, centerY, centerZ, Rad, color) {
   let circle = new Circle()
-    .set_color(255, 0, 0)
+    .set_color(color)
     .set_pos(centerX, centerY, centerZ)
     .set_baseRad(Rad)
     .set_breath_FreqAmpl(earth_params.breathFreq, earth_params.breathAmplMin, earth_params.breathAmplMax);
@@ -159,20 +160,12 @@ function update_circle() { // for circles
     if (c.updatedR < c.baseR && c.startBreath == false) {
       c.updatedR = lerp(c.updatedR, params.phase1_breathCircle_Rad, 0.05); // circle spread 
     }
-    if (emotion_circle.length > 0) {
-      // console.log(emotion_circle.length)
-      let rand = floor(Math.random(0, emotion_circle.length));
-      while (particles.length < total_PARTICLE_NUMBER) {
-        emotion_circle[rand].addParticles();
-        // console.log(rand)
-      }
+  }
+  if (emotion_circle.length > 0) {
+    while (particles.length < total_PARTICLE_NUMBER) {
+      let rand = Math.floor(Math.random() * emotion_circle.length);
+      emotion_circle[rand].addParticles();
     }
-    // if (abs(c.updatedR - params.phase1_breathCircle_Rad) < 0.1) {
-    //   c.updatedR = params.phase1_breathCircle_Rad;
-    // }
-    // if (breathingAmp < params.phase1_breathCircle_Amp) {
-    //   breathingAmp++;
-    // }
   }
 }
 

@@ -73,3 +73,31 @@ function get_box(x, y, z) {
     scene.add(cube);
     return cube
 }
+function hslToRgb(h, s, l) {
+    h = abs(360 - ((h + 270) % 360));
+    h = h / 360;
+    let c = (1 - Math.abs(2 * l - 1)) * s;
+    let x = c * (1 - Math.abs((h * 6) % 2 - 1));
+    let m = l - c / 2;
+
+    let r = 0, g = 0, b = 0;
+    if (h >= 0 && h < 1 / 6) {
+        r = c; g = x; b = 0;
+    } else if (h >= 1 / 6 && h < 2 / 6) {
+        r = x; g = c; b = 0;
+    } else if (h >= 2 / 6 && h < 3 / 6) {
+        r = 0; g = c; b = x;
+    } else if (h >= 3 / 6 && h < 4 / 6) {
+        r = 0; g = x; b = c;
+    } else if (h >= 4 / 6 && h < 5 / 6) {
+        r = x; g = 0; b = c;
+    } else if (h >= 5 / 6 && h <= 1) {
+        r = c; g = 0; b = x;
+    }
+
+    r = r + m;
+    g = g + m;
+    b = b + m;
+    return [r, g, b];
+}
+
