@@ -1,3 +1,15 @@
+function isNumber(value) {
+  return typeof value === 'number';
+}
+
+function randomNumber(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+function lerp( a, b, alpha) {
+    return a + alpha * ( b - a )
+}
+
 function addImagePlane() {
     const loader = new THREE.TextureLoader();
     loader.load(
@@ -17,20 +29,12 @@ function addImagePlane() {
     );
 }
 
-function keyPressed() {
-    console.log(key, keyCode);
-    if (key === "1") {
-        emotion_at(angle = random(0, 360), distance = 100, percentage = 1);
-    }
+function map(v, a, b, c, d) {
+    return v * (d - c) / (b - a)
 }
 
-function setupFastSinCos() {
-    for (let i = 0; i < sinCosResolution; i++) {
-        let deg = map(i, 0, sinCosResolution, 0, 360);
-        let rad = radians(deg);
-        sinArray.push(sin(rad));
-        cosArray.push(cos(rad));
-    }
+function radians(d) {
+    return Math.PI * d / 180
 }
 
 
@@ -46,6 +50,16 @@ function keyReleased() {
     }
 }
 
+function setupFastSinCos() {
+    console.log("setupFastSinCos")
+    for (let i = 0; i < sinCosResolution; i++) {
+        let deg = map(i, 0, sinCosResolution, 0, 360);
+        let rad = radians(deg);
+        sinArray.push(Math.sin(rad));
+        cosArray.push(Math.cos(rad));
+    }
+}
+
 
 // fast Sin & Cos
 let sinArray = [];
@@ -55,13 +69,13 @@ let sinCosResolution = 360 * 2; // 720
 function mSin(rad) {
     let angle = rad % TWO_PI;
     if (angle < 0) angle += TWO_PI;
-    let index = floor(map(angle, 0, TWO_PI, 0, sinCosResolution));
+    let index = Math.floor(map(angle, 0, TWO_PI, 0, sinCosResolution));
     return sinArray[index];
 }
 function mCos(rad) {
     let angle = rad % TWO_PI;
     if (angle < 0) angle += TWO_PI;
-    let index = floor(map(angle, 0, TWO_PI, 0, sinCosResolution));
+    let index = Math.floor(map(angle, 0, TWO_PI, 0, sinCosResolution));
     return cosArray[index];
 }
 
@@ -74,7 +88,7 @@ function get_box(x, y, z) {
     return cube
 }
 function hslToRgb(h, s, l) {
-    h = abs(360 - ((h + 270) % 360));
+    h = Math.abs(360 - ((h + 270) % 360));
     h = h / 360;
     let c = (1 - Math.abs(2 * l - 1)) * s;
     let x = c * (1 - Math.abs((h * 6) % 2 - 1));

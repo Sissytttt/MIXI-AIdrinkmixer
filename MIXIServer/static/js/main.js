@@ -5,6 +5,8 @@
 // 3. 保留base circle
 // 4. 相近的圆圈 合并成一个 update变成更大的半径
 
+// import { setupFastSinCos, addImagePlane, randomNumber } from './utils.js';
+
 let earth_params = {
   sizeMin: 30,
   sizeMax: 60,
@@ -49,6 +51,8 @@ let particles = [];
 
 let spacePressed = false;
 
+let TWO_PI = 2 * Math.PI
+
 
 function setupThree() {
   setupFastSinCos();
@@ -56,11 +60,12 @@ function setupThree() {
 
   // particles
   for (let i = 0; i < MAX_PARTICLE_NUMBER; i++) {
-    let x = random(-params.WORLD_WIDTH / 2, params.WORLD_WIDTH / 2)
-    let y = random(-params.WORLD_HEIGHT / 2, params.WORLD_HEIGHT / 2)
+    console.log("test")
+    let x = randomNumber(-params.WORLD_WIDTH / 2, params.WORLD_WIDTH / 2)
+    let y = randomNumber(-params.WORLD_HEIGHT / 2, params.WORLD_HEIGHT / 2)
     let tParticle = new ParticleBasic()
-      .set_pos(x, y, random(-5, 5))
-      .set_vel(random(-1, 1), random(-1, 1), random(-1, 1))
+      .set_pos(x, y, randomNumber(-5, 5))
+      .set_vel(randomNumber(-1, 1), randomNumber(-1, 1), randomNumber(-1, 1))
       .set_lifeReduction(0.01, 0.7);
     particles.push(tParticle);
   }
@@ -77,12 +82,11 @@ function setupThree() {
 function updateThree() {
   generate_coordinateCircle();
   update_coordinateCircle();
-
   if (spacePressed) {
     if (total_PARTICLE_NUMBER < MAX_PARTICLE_NUMBER) {
-      print("pressed")
+      console.log("pressed")
       total_PARTICLE_NUMBER += 50;
-      emotion_at(angle = random(360), distance = 1, percentage = random(0, 1));
+      emotion_at(angle = randomNumber(0, 360), distance = 1, percentage = randomNumber(0, 1));
       spacePressed = false;
       console.log(emotion_circle.length);
     }
@@ -102,13 +106,13 @@ let coordinateRadius = 150;
 
 function generate_coordinateCircle() {
   while (particles.length < total_PARTICLE_NUMBER) {
-    let angle = random(TWO_PI);
+    let angle = randomNumber(0, TWO_PI);
     let x = mCos(angle) * coordinateRadius * 2;
     let y = mSin(angle) * coordinateRadius * 2;
     let velocity = 0.02;
     let tParticle = new ParticleBasic()
-      .set_pos(x, y, random(-5, 5))
-      .set_vel(random(-velocity, velocity), random(-velocity, velocity), random(-velocity, velocity))
+      .set_pos(x, y, randomNumber(-5, 5))
+      .set_vel(randomNumber(-velocity, velocity), randomNumber(-velocity, velocity), randomNumber(-velocity, velocity))
       .set_lifeReduction(0.005, 0.001);
     particles.push(tParticle);
   }
@@ -148,6 +152,7 @@ function emotion_at(angle, percentage) {
   let hue = map(angle, 0, TWO_PI, 0, 360);
   let rgbColor = hslToRgb(hue, 1, 0.5);
   let saturation = percentage;
+  console.log("rgbColor: ", rgbColor)
   setup_circle(x, y, z, r, rgbColor, saturation);
 }
 
@@ -158,6 +163,7 @@ function setup_circle(centerX, centerY, centerZ, Rad, color, saturation) {
     .set_pos(centerX, centerY, centerZ)
     .set_baseRad(Rad)
     .set_breath_FreqAmpl(earth_params.breathFreq, earth_params.breathAmplMin, earth_params.breathAmplMax);
+  console.log("c:", circle, circle.color)
   emotion_circle.push(circle);
 }
 
@@ -178,3 +184,4 @@ function update_circle() { // for circles
   }
 }
 
+initThree();

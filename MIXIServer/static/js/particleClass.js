@@ -1,13 +1,47 @@
+class createVector {
+    constructor(_x=0, _y=0, _z=0) {
+        this.x=_x
+        this.y=_y
+        this.z=_z
+    }
+
+    add(_v) {
+        if (isNumber(_v)) {
+            this.x+=_v
+            this.y+=_v
+            this.z+=_v
+        }
+        else {
+            this.x+=_v.x
+            this.y+=_v.y
+            this.z+=_v.z
+        }
+    }
+
+    mult(_v) {
+        if (isNumber(_v)) {
+            this.x*=_v
+            this.y*=_v
+            this.z*=_v
+        }
+        else {
+            this.x*=_v.x
+            this.y*=_v.y
+            this.z*=_v.z
+        }   
+    }
+}
+
 class ParticleBasic {
     constructor() {
         this.isBasic = true;
         this.isCoord = false;
         this.isEmo = false;
-        this.pos = createVector();
-        this.vel = createVector();
-        this.acc = createVector();
+        this.pos = new createVector();
+        this.vel = new createVector();
+        this.acc = new createVector();
 
-        this.scl = createVector(1, 1, 1);
+        this.scl = new createVector(1, 1, 1);
         this.mass = this.scl.x * this.scl.y * this.scl.z;
         this.color = { r: 255, g: 255, b: 255 };
         this.opacity = 1;
@@ -27,11 +61,11 @@ class ParticleBasic {
         return this;
     }
     set_pos(x, y, z) {
-        this.pos = createVector(x, y, z);
+        this.pos = new createVector(x, y, z);
         return this;
     }
     set_vel(x, y, z) {
-        this.vel = createVector(x, y, z);
+        this.vel = new createVector(x, y, z);
         return this;
     }
     set_color(r, g, b) {
@@ -45,12 +79,12 @@ class ParticleBasic {
         if (w < minScale) w = minScale;
         if (h < minScale) h = minScale;
         if (d < minScale) d = minScale;
-        this.scl = createVector(w, h, d);
+        this.scl = new createVector(w, h, d);
         this.mass = this.scl.x * this.scl.y * this.scl.z;
         return this;
     }
     set_lifeReduction(min, max) {
-        this.lifeReduction = random(min, max);
+        this.lifeReduction = randomNumber(min, max);
         return this;
     }
     set_lifeSpan(lifeSpan) {
@@ -158,12 +192,12 @@ class EmoParticle extends ParticleBasic {
 
 class Circle {
     constructor() {
-        this.pos = createVector();
+        this.pos = new createVector();
         this.color = { r: 255, g: 255, b: 255 };
         this.startBreath = false;
     }
     set_pos(x, y, z) {
-        this.pos = createVector(x, y, z);
+        this.pos = new createVector(x, y, z);
         return this;
     }
     set_color(color) {
@@ -174,7 +208,7 @@ class Circle {
     }
     set_saturation(intensity) { // intensity = 0-1
         // 1 -> strong ; saturation -> 0 small
-        this.saturationMin = map(intensity, 0, 1, 1, 0.4);
+        this.saturation = map(intensity, 0, 1, 1, 0.4);
         return this;
     }
     set_baseRad(r) {
@@ -192,11 +226,11 @@ class Circle {
         this.updatedR = this.baseR + mSin(frame * this.breathFreq) * this.breathAmpl;
     }
     addParticles() {
-        let randomAngle = random(PI / 2, 2 * PI + PI / 2);
+        let randomAngle = randomNumber(Math.PI / 2, 2 * Math.PI + Math.PI / 2);
         let circlePosX = mSin(randomAngle) * this.updatedR;
         let circlePosY = mCos(randomAngle) * this.updatedR;
         let moveRange = map(this.baseR, earth_params.sizeMin, earth_params.sizeMax, earth_params.moveRangeMin, earth_params.moveRangeMin);
-        let mixWhite = random(0, this.saturation);
+        let mixWhite = randomNumber(0, this.saturation);
         let r = lerp(this.color.r, 1, mixWhite);
         let g = lerp(this.color.g, 1, mixWhite);
         let b = lerp(this.color.b, 1, mixWhite);

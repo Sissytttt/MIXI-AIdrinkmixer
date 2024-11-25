@@ -4,16 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project | three.js + p5.js</title>
+  <title>Project | three.js</title>
 
   <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
 
   <!-- import the supplementary libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/16/Stats.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
-
-  <!-- import the p5.js library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.js"></script>
 
   <!-- import the three.js library -->
   <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
@@ -34,17 +31,58 @@
   </script>
 
   <!-- import your scripts here! -->
-  <script defer src="{{url_for('static', filename='js/script-three.js')}}"></script>
-  <script defer src="{{url_for('static', filename='js/script-p5.js')}}"></script>
-  <script defer src="{{url_for('static', filename='js/main.js')}}"></script>
-  <script src="{{url_for('static', filename='js/particleClass.js')}}"></script>
   <script src="{{url_for('static', filename='js/utils.js')}}"></script>
+  <script src="{{url_for('static', filename='js/particleClass.js')}}"></script>  
   <script src="{{url_for('static', filename='js/three-utils.js')}}"></script>
+  <script defer src="{{url_for('static', filename='js/script-three.js')}}"></script>
+  <script defer src="{{url_for('static', filename='js/main.js')}}"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 </head>
 
 <body>
-  <div id="container-three"></div>
-  <div id="container-p5"></div>
+  <script type="text/javascript">
+    $(document).ready(function() {
+
+        var socket = io.connect('http://127.0.0.1:5000');
+
+        socket.on('connect', function() {
+            socket.send('User has connected!');
+            spacePressed = false;
+        });
+
+        socket.on('message', function(msg) {
+            console.log('Received message');
+            if (msg == "true") {
+              spacePressed = true;
+            } 
+        });
+
+        $('#sendbutton').on('click', function() {
+            console.log("test");
+            socket.send("true");
+        });
+
+    });
+    </script>
+
+    <h1>Speech Recognition</h1>
+    <button id="sendbutton">Sendddd</button>
+    <button id="toggleListening">Start Listening</button>
+    <div>
+        <h3>Recognized Text:</h3>
+        <p id="recognizedText">No text recognized yet.</p>
+        <h3>Recipe:</h3>
+        <p id="recipeDetails">No recipe details available.</p>
+    </div>
+    <script src="{{ url_for('static', filename='js/speech_recognition.js') }}"></script>
+
+    
+    <div id="container-three"></div>
+  }
 </body>
+
+
 
 </html>
