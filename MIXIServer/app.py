@@ -6,16 +6,13 @@ import os
 # Add the parent directory to sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # from init_server import init_letta
-from flask_socketio import SocketIO, send
-
-# import eventlet
-# eventlet.monkey_patch()
+# from flask_socketio import SocketIO, send
 
 # start server
 app = Flask(__name__)
 app.debug = True
 app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app, cors_allowed_origins="*")
+# socketio = SocketIO(app, cors_allowed_origins="*")
 
 # this is for websocket
 clients = []
@@ -291,18 +288,18 @@ def delete_an_agent():
     client.delete_agent(client.get_agent_id(agent_name))
     return "Delete"
 
-@socketio.on('message')
-def handle_message(msg):
-    print(f"Message: {msg}")
-    send(msg)
+# @socketio.on('message')
+# def handle_message(msg):
+#     print(f"Message: {msg}")
+#     send(msg)
 
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=5001)
+# if __name__ == '__main__':
+#     socketio.run(app, host='0.0.0.0', port=5001)
 
 
 
