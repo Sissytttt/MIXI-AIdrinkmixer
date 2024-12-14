@@ -41,7 +41,7 @@ let data = {
 }
 
 let MAX_PARTICLE_NUMBER = 3000;
-let coordinate_particleNum = 50;
+let coordinate_particleNum = 300;
 let total_PARTICLE_NUMBER = coordinate_particleNum; // start from 500
 
 let pointCloud;
@@ -81,7 +81,7 @@ function updateThree() {
   if (spacePressed) {
     if (total_PARTICLE_NUMBER < MAX_PARTICLE_NUMBER) {
       print("pressed")
-      total_PARTICLE_NUMBER += 50;
+      total_PARTICLE_NUMBER += 100;
       emotion_at(angle = random(360), distance = 1, percentage = random(0, 1));
       spacePressed = false;
       console.log(emotion_circle.length);
