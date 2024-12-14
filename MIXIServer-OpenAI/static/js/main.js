@@ -60,7 +60,7 @@ function setupThree() {
 
   // particles
   for (let i = 0; i < MAX_PARTICLE_NUMBER; i++) {
-    // console.log("test")
+    console.log("test")
     let x = randomNumber(-params.WORLD_WIDTH / 2, params.WORLD_WIDTH / 2)
     let y = randomNumber(-params.WORLD_HEIGHT / 2, params.WORLD_HEIGHT / 2)
     let tParticle = new ParticleBasic()

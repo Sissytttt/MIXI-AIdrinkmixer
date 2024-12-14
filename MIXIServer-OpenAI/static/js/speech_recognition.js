@@ -22,11 +22,11 @@ if (window.SpeechRecognition || window.webkitSpeechRecognition) {
     recognition.continuous = true;
 
     recognition.onresult = (event) => {
-        // const transcript = event.results[0][0].transcript;
-        // recognizedTextDisplay.textContent = transcript;
+        const transcript = event.results[0][0].transcript;
+        recognizedTextDisplay.textContent = transcript;
 
         if (!isListening) {
-            fetch(`http://127.0.0.1:5000/send_message_to_agent?message=${encodeURIComponent(event.results[0][0].transcript)}`)
+            fetch(`http://127.0.0.1:5000/send_message_to_agent?message=${encodeURIComponent(transcript)}`)
                 .then(response => response.json())
                 .then(data => {
                     // console.log("data: ", data["msg"][0].Polar_angle, data["msg"][1].Percentage)

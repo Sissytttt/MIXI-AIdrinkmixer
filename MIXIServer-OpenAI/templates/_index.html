@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drink Mixer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+        }
+
+        button {
+            padding: 20px 40px;
+            font-size: 24px;
+            cursor: pointer;
+            background-color: #93b3b7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:active {
+            background-color: #93b3b7;
+        }
+
+        #message {
+            width: 80%;
+            padding: 10px;
+            font-size: 18px;
+            margin-top: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>MIXI</h1>
+    <button id="toggleButton" onclick="toggleButton()">Start</button>
+    <textarea id="message" placeholder="Type something..." style="display:none;"></textarea>
+
+    <script>
+        let isRecording = false;
+
+        function toggleButton() {
+            const button = document.getElementById("toggleButton");
+            const messageBox = document.getElementById("message");
+
+            if (isRecording) {
+                button.innerText = "Start";
+                messageBox.style.display = "none";
+                sendMessageToAgent(messageBox.value);  // Send the recorded message
+            } else {
+                // When started, show the text area to capture input
+                button.innerText = "Stop";
+                messageBox.style.display = "block";
+            }
+            isRecording = !isRecording;
+        }
+
+        function sendMessageToAgent(message) {
+            fetch(`/send_message_to_agent?message=${encodeURIComponent(message)}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Agent Response:', data);
+                    // Optionally, show the response from the agent
+                    alert(data.msg || 'Error sending message');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>
