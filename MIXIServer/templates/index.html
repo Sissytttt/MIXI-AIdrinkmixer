@@ -2,78 +2,87 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drink Mixer</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 100px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project | three.js</title>
 
-        button {
-            padding: 20px 40px;
-            font-size: 24px;
-            cursor: pointer;
-            background-color: #93b3b7;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
+  <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
 
-        button:active {
-            background-color: #93b3b7;
-        }
+  <!-- import the supplementary libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/16/Stats.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.min.js"></script>
 
-        #message {
-            width: 80%;
-            padding: 10px;
-            font-size: 18px;
-            margin-top: 20px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-    </style>
+  <!-- import the three.js library -->
+  <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.156.1/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.156.1/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    console.log("3:", THREE)
+    window.THREE = THREE;
+    window.OrbitControls = OrbitControls;
+  </script>
+
+  <!-- import your scripts here! -->
+  <script src="{{url_for('static', filename='js/utils.js')}}"></script>
+  <script src="{{url_for('static', filename='js/particleClass.js')}}"></script>  
+  <script src="{{url_for('static', filename='js/three-utils.js')}}"></script>
+  <script defer src="{{url_for('static', filename='js/script-three.js')}}"></script>
+  <script defer src="{{url_for('static', filename='js/main.js')}}"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script> -->
 </head>
 
 <body>
-    <h1>MIXI</h1>
-    <button id="toggleButton" onclick="toggleButton()">Start</button>
-    <textarea id="message" placeholder="Type something..." style="display:none;"></textarea>
+  <!-- <script type="text/javascript">
+    $(document).ready(function() {
 
-    <script>
-        let isRecording = false;
+        var socket = io.connect('http://127.0.0.1:5000');
 
-        function toggleButton() {
-            const button = document.getElementById("toggleButton");
-            const messageBox = document.getElementById("message");
+        socket.on('connect', function() {
+            socket.send('User has connected!');
+            spacePressed = false;
+        });
 
-            if (isRecording) {
-                button.innerText = "Start";
-                messageBox.style.display = "none";
-                sendMessageToAgent(messageBox.value);  // Send the recorded message
-            } else {
-                // When started, show the text area to capture input
-                button.innerText = "Stop";
-                messageBox.style.display = "block";
-            }
-            isRecording = !isRecording;
-        }
+        socket.on('message', function(msg) {
+            console.log('Received message');
+            if (msg == "true") {
+              spacePressed = true;
+            } 
+        });
 
-        function sendMessageToAgent(message) {
-            fetch(`/send_message_to_agent?message=${encodeURIComponent(message)}`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Agent Response:', data);
-                    // Optionally, show the response from the agent
-                    alert(data.msg || 'Error sending message');
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-    </script>
+        $('#sendbutton').on('click', function() {
+            console.log("test");
+            socket.send("true");
+        });
+
+    });
+    </script> -->
+
+    <h1>Speech Recognition</h1>
+    <br />
+    <button id="toggleListening">Start Listening</button>
+    <div>
+        <h3>Recognized Text:</h3>
+        <p id="recognizedText">No text recognized yet.</p>
+        <h3>Recipe:</h3>
+        <p id="recipeDetails">No recipe details available.</p>
+    </div>
+    <script src="{{ url_for('static', filename='js/speech_recognition.js') }}"></script>
+
+    
+    <div id="container-three"></div>
+  }
 </body>
+
+
 
 </html>
