@@ -5,10 +5,10 @@
 // 3. 保留base circle
 // 4. 相近的圆圈 合并成一个 update变成更大的半径
 // 5. 大圆不要消失
-// 6. 大圆的粒子透明度
+// 6. 大圆的粒子透明度 v
 // 7. 加flow movement ***
-// 8. 最后汇聚到中间 ***
-// 9. 颜色都浅一点 白一点 ***
+// 8. 最后汇聚到中间 v
+// 9. 颜色都浅一点 白一点 v
 
 // import { setupFastSinCos, addImagePlane, randomNumber } from './utils.js';
 
@@ -48,8 +48,8 @@ let data = {
 }
 
 let MAX_PARTICLE_NUMBER = 3000;
-let coordinate_particleNum = 50;
-let total_PARTICLE_NUMBER = coordinate_particleNum; // start from 500
+let coordinate_particleNum = 200;
+let total_PARTICLE_NUMBER = coordinate_particleNum;
 
 let pointCloud;
 let particles = [];
@@ -58,6 +58,7 @@ let spacePressed = false;
 
 let TWO_PI = 2 * Math.PI
 
+let convert = false;
 // let noise;
 
 function setupThree() {
@@ -91,21 +92,14 @@ function setupThree() {
 }
 
 function updateThree() {
-  generate_coordinateCircle();
-  update_coordinateCircle();
-  if (spacePressed) {
-    if (total_PARTICLE_NUMBER < MAX_PARTICLE_NUMBER) {
-      // console.log("pressed")
-      total_PARTICLE_NUMBER += 50;
-      emotion_at(angle = randomNumber(0, 360), distance = 1, percentage = randomNumber(0, 1));
-      spacePressed = false;
-      // console.log(emotion_circle.length);
-    }
-    else {
-      console.log("Already hit the maximum number")
-    }
+  if (convert == false) {
+    generate_coordinateCircle();
+    update_coordinateCircle();
+    update_circle();
   }
-  update_circle();
+  else {
+    convertParticles();
+  }
   updatePoints();
   params.particleNum = particles.length; // update GUI
 }
@@ -116,12 +110,13 @@ function updateThree() {
 let coordinateRadius = 150;
 
 function generate_coordinateCircle() {
-  while (particles.length < total_PARTICLE_NUMBER) {
+  if (particles.length < total_PARTICLE_NUMBER) {
     let angle = randomNumber(0, TWO_PI);
     let x = mCos(angle) * coordinateRadius * 2;
     let y = mSin(angle) * coordinateRadius * 2;
     let velocity = 0.02;
     let tParticle = new ParticleBasic()
+      .set_color(0.8, 0.8, 0.8)
       .set_pos(x, y, randomNumber(-5, 5))
       .set_vel(randomNumber(-velocity, velocity), randomNumber(-velocity, velocity), randomNumber(-velocity, velocity))
       .set_lifeReduction(0.005, 0.001);
@@ -171,6 +166,7 @@ function emotion_at(angle, percentage) {
 
 function setup_circle(centerX, centerY, centerZ, Rad, color, saturation) {
   let circle = new Circle()
+    .set_startframe()
     .set_color(color)
     .set_saturation(saturation)
     .set_pos(centerX, centerY, centerZ)
@@ -198,3 +194,27 @@ function update_circle() { // for circles
 }
 
 initThree();
+
+document.addEventListener('keydown', function (event) {
+  if (event.code === 'Space') {
+    convert = true;
+  }
+});
+
+function convertParticles() {
+  // console.log("convert");
+  for (let i = 0; i < particles.length; i++) {
+    let p = particles[i];
+    let xdirection = Math.random() < 0.5 ? 1 : -1;
+    let ydirection = Math.random() < 0.5 ? 1 : -1;
+    let zdirection = Math.random() < 0.5 ? 1 : -1;
+    let v = Math.random() * 0.1
+    randomForce = new createVector(v * xdirection, v * ydirection, v * zdirection);
+    p.apply_force(randomForce);
+    // p.age();
+    p.move();
+    p.update_opacity();
+    p.remove();
+    p.check_boundary();
+  }
+}

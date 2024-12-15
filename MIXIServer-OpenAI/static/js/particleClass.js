@@ -100,7 +100,7 @@ class ParticleBasic {
         this.opacity = this.lifespan;
     }
     apply_force(f) {
-        let force = f.copy();
+        let force = new createVector(f.x, f.y, f.z);
         this.acc.add(force);
     }
     age(lifeReduction = this.lifeReduction) {
@@ -197,6 +197,10 @@ class Circle {
         this.color = { r: 255, g: 255, b: 255 };
         this.startBreath = false;
     }
+    set_startframe() {
+        this.startframe = Math.floor(randomRange(0, 5000));
+        return this;
+    }
     set_pos(x, y, z) {
         this.pos = new createVector(x, y, z);
         return this;
@@ -224,23 +228,23 @@ class Circle {
         return this;
     }
     breath() { // update R
-        this.updatedR = this.baseR + mSin(frame * this.breathFreq) * this.breathAmpl;
+        this.updatedR = this.baseR + mSin((frame - this.startframe) * this.breathFreq) * this.breathAmpl;
     }
     addParticles() {
         let randomAngle = randomNumber(Math.PI / 2, 2 * Math.PI + Math.PI / 2);
         let circlePosX = mSin(randomAngle) * this.updatedR;
         let circlePosY = mCos(randomAngle) * this.updatedR;
         let moveRange = map(this.baseR, earth_params.sizeMin, earth_params.sizeMax, earth_params.moveRangeMin, earth_params.moveRangeMin);
-        let mixWhite = randomNumber(0, this.saturation);
-        let r = lerp(this.color.r, 1, mixWhite);
-        let g = lerp(this.color.g, 1, mixWhite);
-        let b = lerp(this.color.b, 1, mixWhite);
+        let lerpValue = randomRange(0.2, 0.5)
+        let r = lerp(this.color.r, 1, lerpValue);
+        let g = lerp(this.color.g, 1, lerpValue);
+        let b = lerp(this.color.b, 1, lerpValue);
         let particle = new EmoParticle()
             .set_pos(this.pos.x + circlePosX, this.pos.y + circlePosY, this.pos.z)
             .set_lifeReduction(earth_params.lifeReductionMin, earth_params.lifeReductionMax)
             .set_angle(randomAngle)
             .set_color(r, g, b)
-            .set_rad(this.baseR) // 粒子所在的相对大圆的角度位置，用于之后flow的noise的参数（连贯数值）
+            .set_rad(this.baseR)
             .set_moveRange(moveRange);
         particles.push(particle);
     }

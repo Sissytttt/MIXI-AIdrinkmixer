@@ -17,13 +17,6 @@ function addImagePlane() {
     );
 }
 
-function keyPressed() {
-    console.log(key, keyCode);
-    if (key === "1") {
-        emotion_at(angle = random(0, 360), distance = 100, percentage = 1);
-    }
-}
-
 function setupFastSinCos() {
     for (let i = 0; i < sinCosResolution; i++) {
         let deg = map(i, 0, sinCosResolution, 0, 360);

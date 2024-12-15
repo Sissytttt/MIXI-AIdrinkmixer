@@ -40,13 +40,13 @@ function radians(d) {
 
 function keyPressed() {
     if (key === ' ' && !spacePressed) {
-        spacePressed = true; // 设置标志位为 true，仅在按下瞬间触发
+        spacePressed = true;
     }
 }
 
 function keyReleased() {
     if (key === ' ') {
-        spacePressed = false; // 重置标志位
+        spacePressed = false;
     }
 }
 
@@ -116,13 +116,6 @@ function hslToRgb(h, s, l) {
 }
 
 
-function generateNoise(width, height) {
-    const noise = [];
-    for (let y = 0; y < height; y++) {
-        noise[y] = [];
-        for (let x = 0; x < width; x++) {
-            noise[y][x] = Math.random();
-        }
-    }
-    return noise;
+function randomRange(min, max) {
+    return Math.random() * (max - min) + min;
 }
