@@ -2,11 +2,11 @@ let isListening = false;
 const toggleListeningButton = document.getElementById('toggleListening');
 const recognizedTextDisplay = document.getElementById('recognizedText');
 const recipeDetailsDisplay = document.getElementById('recipeDetails');
-
+let api_flag = false;
 toggleListeningButton.addEventListener('click', () => {
     isListening = !isListening;
     toggleListeningButton.textContent = isListening ? "Stop Listening" : "Start Listening";
-
+    isListening ? api_flag = true : false;
     if (isListening) {
         startRecognition();
     } else {
@@ -22,19 +22,20 @@ if (window.SpeechRecognition || window.webkitSpeechRecognition) {
     recognition.continuous = true;
 
     recognition.onresult = (event) => {
+
         const transcript = event.results[0][0].transcript;
         recognizedTextDisplay.textContent = transcript;
 
-        if (!isListening) {
+        if (api_flag && !isListening) {
+            api_flag = false;
             fetch(`http://127.0.0.1:5000/send_message_to_agent?message=${encodeURIComponent(transcript)}`)
                 .then(response => response.json())
                 .then(data => {
-                    // console.log("data: ", data["msg"][0].Polar_angle, data["msg"][1].Percentage)
-                    // console.log("data[0].Polar_angle, data[1].Percentage: ", data["msg"][0].Polar_angle, data["msg"][1].Percentage)
+                    console.log("data: ", data["Polar_angle"], data["Percentage"])
                     total_PARTICLE_NUMBER += 50;
-                    emotion_at(data["msg"][0].Polar_angle, data["msg"][1].Percentage)
+                    emotion_at(data["Polar_angle"], data["Percentage"])
                 })
-                // .catch(error => console.error("Error fetching recipe:", error));
+                .catch(error => console.error("Error fetching recipe:", error));
         }
     };
 

@@ -1,13 +1,13 @@
 function isNumber(value) {
-  return typeof value === 'number';
+    return typeof value === 'number';
 }
 
 function randomNumber(min, max) {
     return Math.random() * (max - min) + min;
 }
 
-function lerp( a, b, alpha) {
-    return a + alpha * ( b - a )
+function lerp(a, b, alpha) {
+    return a + alpha * (b - a)
 }
 
 function addImagePlane() {
