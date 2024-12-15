@@ -42,7 +42,7 @@ if agent_exist("MIXI"):
 
 else: # create a new MIXI agent
     agent_state = client.create_agent(
-        name=f"MIXI",
+        name="MIXI",
         memory=ChatMemory(
             human="user",
             persona="""
