@@ -5,6 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Project | three.js</title>
+  <style>
+    #toggleListening {
+      display: none;
+    }
+  </style>
 
   <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
 
@@ -25,14 +30,16 @@
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    // import { Noise } from 'noisejs';
     console.log("3:", THREE)
     window.THREE = THREE;
     window.OrbitControls = OrbitControls;
+    // window.Noise = Noise;
   </script>
 
   <!-- import your scripts here! -->
   <script src="{{url_for('static', filename='js/utils.js')}}"></script>
-  <script src="{{url_for('static', filename='js/particleClass.js')}}"></script>  
+  <script src="{{url_for('static', filename='js/particleClass.js')}}"></script>
   <script src="{{url_for('static', filename='js/three-utils.js')}}"></script>
   <script defer src="{{url_for('static', filename='js/script-three.js')}}"></script>
   <script defer src="{{url_for('static', filename='js/main.js')}}"></script>
@@ -67,20 +74,20 @@
     });
     </script> -->
 
-    <h1>Speech Recognition</h1>
-    <br />
-    <button id="toggleListening">Start Listening</button>
-    <div>
-        <h3>Recognized Text:</h3>
-        <p id="recognizedText">No text recognized yet.</p>
-        <h3>Recipe:</h3>
-        <p id="recipeDetails">No recipe details available.</p>
-    </div>
-    <script src="{{ url_for('static', filename='js/speech_recognition.js') }}"></script>
+  <h1>Speech Recognition</h1>
+  <br />
+  <button id="toggleListening">Start Listening</button>
+  <!-- <div>
+    <h3>Recognized Text:</h3>
+    <p id="recognizedText">No text recognized yet.</p>
+    <h3>Recipe:</h3>
+    <p id="recipeDetails">No recipe details available.</p>
+  </div> -->
+  <script src="{{ url_for('static', filename='js/speech_recognition.js') }}"></script>
 
-    
-    <div id="container-three"></div>
-  }
+
+  <div id="container-three"></div>
+
 </body>
 
 

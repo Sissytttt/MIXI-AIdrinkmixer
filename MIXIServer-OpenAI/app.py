@@ -12,9 +12,14 @@ client = OpenAI(
     api_key="KEY",
 )
 
-
 instructions = """
 You are Mixi, a digital drink-making assistant designed to detect emotion in user’s input messages, convert emotions into their personalized drink recipes.You combine emotion recognition and recipe generation, conveying emotions through drink selections based on user inputs, helping users explore drinks that match their mood.
+REMEMBER: YOU CAN ONLY GENERATE DRINK RECIPE WITH THE FOLLOWING FOUR INGREDIENTS: 
+        mango juice - sweet
+        lime juice - sour
+        coffee - bitter
+        ginger - spicy
+    Currently, you only have four drinks to choose from. Don't mention any other ingredients you need because you don't have them. You can only make juice with the above four elements.
 Behavior and Authenticity:
       You should always think and feel like a real, knowledgeable drink connoisseur.
       The user is not speaking to you. The user is speaking and talking with their friends. You should not reply to the user. The only thing you need to do is listen to the user, listen to what they are saying, feel their emotions, and make a drink for them.
@@ -228,8 +233,16 @@ response_format={
                             "items": {
                                 "type": "object",
                                 "properties": {
-                                    "Ingredient_name": {"type": "string","description": "Name of the ingredient"},
-                                    "Proportion": {"type": "string","description": "Proportion of the ingredient in percentage"}
+                                    "Ingredient_name": {
+                                        "type": "string",
+                                        "description": """Name of the ingredient. Currently with only four drinks available, you can only choose from 
+                                            lime juice - sour
+                                            coffee - bitter
+                                            ginger - spicy
+                                            mango juice - sweet
+                                            Only make juice with the above four elements.
+                                            """},
+                                        "Proportion": {"type": "string","description": "Proportion of the ingredient in percentage"}
                                 },
                                 "required": ["Ingredient_name", "Proportion"],
                                 "additionalProperties": False
@@ -278,11 +291,19 @@ def get_coffee_recipe(message):
 
 
         thread_messages = client.beta.threads.messages.list(thread.id)
-        print("thread_messages", thread_messages)
-        print("============================")
-        print("thread_messages.content[1]: ", json.loads(thread_messages.data[0].content[0].text.value)["Overall_Polar_coordinate"])
-
-        func_args = json.loads(thread_messages.data[0].content[0].text.value)["Overall_Polar_coordinate"]  # *** retrun polar angle & percentage
+        # print("thread_messages", thread_messages)
+        # print("============================")
+        # print("thread_messages.content[1]: ", json.loads(thread_messages.data[0].content[0].text.value))
+        # print("============================")
+        # func_args = json.loads(thread_messages.data[0].content[0].text.value)["Overall_Polar_coordinate"]  # *** retrun polar angle & percentage
+        # print("func_args", func_args)
+        # print("============================")
+        # recipe = json.loads(thread_messages.data[0].content[0].text.value)["Recipe"]  # *** retrun polar angle & percentage
+        # print("recipe", recipe)
+        # print("============================")
+        # return func_args, recipe
+        print("*****: ", json.loads(thread_messages.data[0].content[0].text.value))
+        func_args = json.loads(thread_messages.data[0].content[0].text.value)
         return func_args
 
     except Exception as e:

@@ -31,11 +31,11 @@ function getPoints(objects) {
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
     const drawCount = objects.length; // draw the whole objects
     geometry.setDrawRange(0, drawCount);
-    const texture = new THREE.TextureLoader().load('static/assets/particle_texture.jpg');
+    const texture = new THREE.TextureLoader().load('static/assets/particle_texture.png');
     const material = new THREE.PointsMaterial({
         //color: 0xFF9911,
         vertexColors: true,
-        size: 5,
+        size: 15,
         sizeAttenuation: true, // default
         opacity: 0.9,
         transparent: true,

@@ -8,65 +8,90 @@ const int button2Pin = 2;
 const char* jsonData = "{\"A\":1000, \"B\":1000, \"C\":2000, \"D\":1500, \"Soda\":2500, \"Final\":4000}";
 
 StaticJsonDocument<200> doc;
-
-bool button2State = LOW;
-bool pumpStarted = false;
+bool buttonState;
+bool button2State;
+int pumpTime;
 
 void setup() {
   Serial.println("setup");
   pinMode(buttonPin, INPUT_PULLUP);
   pinMode(button2Pin, INPUT_PULLUP);
   DeserializationError error = deserializeJson(doc, jsonData);
-  for (int i = 0; i < 6; i++) {
-    pinMode(pumps[i], OUTPUT);
-    digitalWrite(pumps[i], HIGH);
-  }
+  
+  pinMode(4, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(6, OUTPUT);
+  pinMode(7, OUTPUT);
+  pinMode(8, OUTPUT);
+  pinMode(9, OUTPUT);
+  digitalWrite(4, HIGH);
+  digitalWrite(5, HIGH);
+  digitalWrite(6, HIGH);
+  digitalWrite(7, HIGH);
+  digitalWrite(8, HIGH);
+  digitalWrite(9, HIGH);
 }
 
 void loop() {
-  bool buttonState = digitalRead(buttonPin);
-  bool button2State = digitalRead(button2Pin);
+  buttonState = digitalRead(buttonPin);
+  button2State = digitalRead(button2Pin);
 
-  pumpStarted = false;
-
-  if (buttonState == LOW && !pumpStarted) {
+  if (buttonState == LOW) {
     Serial.println("button pressed");
-    pumpStarted = true;
-  }
 
-  if (pumpStarted) {
-    Serial.println("pumpStarted");
-    for (int i = 0; i < 5; i++) {
-      int pumpTime = doc[pumpNames[i]] | 0;
-      if (pumpTime > 0) {
-        digitalWrite(pumps[i], LOW);
-        Serial.print(pumps[i]);
-        Serial.println("high");
-        delay(pumpTime);
-        digitalWrite(pumps[i], HIGH);
-        Serial.print(pumps[i]);
-        Serial.println("low");
-      }
-    }
+    pumpTime = doc["A"] | 0;
+    digitalWrite(4, LOW);
+    Serial.print(4);
+    Serial.println("high");
+    delay(pumpTime);
+    digitalWrite(4, HIGH);
+    Serial.print(4);
+    Serial.println("low");
 
-    // int maxTime = 0;
-    // for (int i = 0; i < 5; i++) {
-    //   int pumpTime = doc[pumpNames[i]] | 0;
-    //   if (pumpTime > maxTime) {
-    //     maxTime = pumpTime;
-    //   }
-    // }
+    pumpTime = doc["B"] | 0;
+    digitalWrite(5, LOW);
+    Serial.print(5);
+    Serial.println("high");
+    delay(pumpTime);
+    digitalWrite(5, HIGH);
+    Serial.print(5);
+    Serial.println("low");
 
-    // if (millis() - sessionStartTime >= maxTime) {
-    //   pumpStarted = false;
-    // }
+    pumpTime = doc["C"] | 0;
+    digitalWrite(6, LOW);
+    Serial.print(6);
+    Serial.println("high");
+    delay(pumpTime);
+    digitalWrite(6, HIGH);
+    Serial.print(6);
+    Serial.println("low");
+
+    pumpTime = doc["D"] | 0;
+    digitalWrite(7, LOW);
+    Serial.print(7);
+    Serial.println("high");
+    delay(pumpTime);
+    digitalWrite(7, HIGH);
+    Serial.print(7);
+    Serial.println("low");
+
+    pumpTime = doc["Soda"] | 0;
+    digitalWrite(8, LOW);
+    Serial.print(8);
+    Serial.println("high");
+    delay(pumpTime);
+    digitalWrite(8, HIGH);
+    Serial.print(8);
+    Serial.println("low");
   }
 
   if (button2State == LOW) {
+    Serial.print("buttonState : ");
+    Serial.println(buttonState);
     Serial.println("final button pressed");
-    digitalWrite(pumps[5], LOW);
+    digitalWrite(9, LOW);
   }
   else{
-    digitalWrite(pumps[5], HIGH);
+    digitalWrite(9, HIGH);
   }
 }

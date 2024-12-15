@@ -1,9 +1,14 @@
 // 1. 根据intensity改：
-//    1. 半径大小
+//    1. 半径大小 v
 //    2. 颜色saturationparcile class - circle - addParticles里面的lerp value
 // 2. 呼吸不要同步,呼吸不要消失，变大变小就ok 不要暗掉
 // 3. 保留base circle
 // 4. 相近的圆圈 合并成一个 update变成更大的半径
+// 5. 大圆不要消失
+// 6. 大圆的粒子透明度
+// 7. 加flow movement ***
+// 8. 最后汇聚到中间 ***
+// 9. 颜色都浅一点 白一点 ***
 
 // import { setupFastSinCos, addImagePlane, randomNumber } from './utils.js';
 
@@ -53,8 +58,14 @@ let spacePressed = false;
 
 let TWO_PI = 2 * Math.PI
 
+// let noise;
 
 function setupThree() {
+
+  // console.log(Noise);
+  // const noise = new Noise(Math.random());
+  // print(noise.simplex2(10, 20))
+
   setupFastSinCos();
   addImagePlane();
 
@@ -84,11 +95,11 @@ function updateThree() {
   update_coordinateCircle();
   if (spacePressed) {
     if (total_PARTICLE_NUMBER < MAX_PARTICLE_NUMBER) {
-      console.log("pressed")
+      // console.log("pressed")
       total_PARTICLE_NUMBER += 50;
       emotion_at(angle = randomNumber(0, 360), distance = 1, percentage = randomNumber(0, 1));
       spacePressed = false;
-      console.log(emotion_circle.length);
+      // console.log(emotion_circle.length);
     }
     else {
       console.log("Already hit the maximum number")
@@ -122,18 +133,21 @@ function update_coordinateCircle() {
   for (let i = 0; i < particles.length; i++) {
     let p = particles[i];
     if (p.isBasic) {
+      // p.flow();
       p.age();
       p.move();
       p.remove();
       p.check_boundary();
     }
     else if (p.isCoord == true) {
+      // p.flow();
       p.move();
       p.remove();
       p.check_boundary();
     }
     else if (p.isEmo == true) {
       // p.wave();
+      // p.flow();
       p.age();
       p.move();
       p.update_opacity();
@@ -148,7 +162,7 @@ function emotion_at(angle, percentage) {
   let x = mCos(angle) * 150 * 2;
   let y = mSin(angle) * 150 * 2;
   let z = 0;
-  let r = map(percentage, 0, 1, 0, 30);
+  let r = map(percentage, 0, 1, 0, 80);
   let hue = map(angle, 0, TWO_PI, 0, 360);
   let rgbColor = hslToRgb(hue, 1, 0.5);
   let saturation = percentage;
@@ -162,7 +176,7 @@ function setup_circle(centerX, centerY, centerZ, Rad, color, saturation) {
     .set_pos(centerX, centerY, centerZ)
     .set_baseRad(Rad)
     .set_breath_FreqAmpl(earth_params.breathFreq, earth_params.breathAmplMin, earth_params.breathAmplMax);
-  console.log("c:", circle, circle.color)
+  // console.log("c:", circle, circle.color)
   emotion_circle.push(circle);
 }
 

@@ -115,3 +115,14 @@ function hslToRgb(h, s, l) {
     return [r, g, b];
 }
 
+
+function generateNoise(width, height) {
+    const noise = [];
+    for (let y = 0; y < height; y++) {
+        noise[y] = [];
+        for (let x = 0; x < width; x++) {
+            noise[y][x] = Math.random();
+        }
+    }
+    return noise;
+}

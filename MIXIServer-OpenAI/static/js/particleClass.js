@@ -1,34 +1,34 @@
 class createVector {
-    constructor(_x=0, _y=0, _z=0) {
-        this.x=_x
-        this.y=_y
-        this.z=_z
+    constructor(_x = 0, _y = 0, _z = 0) {
+        this.x = _x
+        this.y = _y
+        this.z = _z
     }
 
     add(_v) {
         if (isNumber(_v)) {
-            this.x+=_v
-            this.y+=_v
-            this.z+=_v
+            this.x += _v
+            this.y += _v
+            this.z += _v
         }
         else {
-            this.x+=_v.x
-            this.y+=_v.y
-            this.z+=_v.z
+            this.x += _v.x
+            this.y += _v.y
+            this.z += _v.z
         }
     }
 
     mult(_v) {
         if (isNumber(_v)) {
-            this.x*=_v
-            this.y*=_v
-            this.z*=_v
+            this.x *= _v
+            this.y *= _v
+            this.z *= _v
         }
         else {
-            this.x*=_v.x
-            this.y*=_v.y
-            this.z*=_v.z
-        }   
+            this.x *= _v.x
+            this.y *= _v.y
+            this.z *= _v.z
+        }
     }
 }
 
@@ -119,12 +119,13 @@ class ParticleBasic {
         }
     }
     flow(posFreq = 0.005, timeFreq = 0.005, spd = 0.01) { // some might need to overwrite
+        noise.seed(Math.random());
         let xFreq = this.pos.x * posFreq + frame * timeFreq;
         let yFreq = this.pos.y * posFreq + frame * timeFreq;
         let zFreq = this.pos.z * posFreq + frame * timeFreq;
-        let noiseValue1 = map(noise(xFreq, yFreq, zFreq), 0.0, 1.0, -1, 1);
-        let noiseValue2 = map(noise(xFreq + 1000, yFreq + 1000, zFreq + 1000), 0.0, 1.0, -1, 1);
-        let noiseValue3 = map(noise(xFreq + 2000, yFreq + 2000, zFreq + 2000), 0.0, 1.0, -1, 1);
+        let noiseValue1 = map(noise.simplex3(xFreq, yFreq, zFreq), 0.0, 1.0, -1, 1);
+        let noiseValue2 = map(noise.simplex3(xFreq + 1000, yFreq + 1000, zFreq + 1000), 0.0, 1.0, -1, 1);
+        let noiseValue3 = map(noise.simplex3(xFreq + 2000, yFreq + 2000, zFreq + 2000), 0.0, 1.0, -1, 1);
         let force = new p5.Vector(noiseValue1, noiseValue2, noiseValue3);
         force.normalize();
         force.mult(spd);
@@ -181,7 +182,7 @@ class EmoParticle extends ParticleBasic {
         let angleFreq = this.angle;
         let radFreq = this.rad * earth_params.WaveRadFreq;
         let frameFreq = frame * 0.0025;
-        let noiseVal = noise(angleFreq, radFreq, frameFreq);
+        let noiseVal = noise.simplex2(angleFreq, radFreq, frameFreq);
         let zPos = 0;
         if (noiseVal > earth_params.moveThreshold) {
             zPos = map(noiseVal, earth_params.moveThreshold, 1, 0, this.moveRange, true);

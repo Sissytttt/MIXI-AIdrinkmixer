@@ -22,26 +22,40 @@
       }
     }
   </script>
+
+
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-    console.log("3:", THREE)
+    import { Noise } from 'noisejs';
+
+    console.log("3:", THREE);
+    console.log("noise", Noise);
+
     window.THREE = THREE;
     window.OrbitControls = OrbitControls;
+    window.Noise = Noise;
   </script>
 
   <!-- import your scripts here! -->
   <script src="{{url_for('static', filename='js/utils.js')}}"></script>
-  <script src="{{url_for('static', filename='js/particleClass.js')}}"></script>  
+  <script defer src="{{url_for('static', filename='js/particleClass.js')}}"></script>
   <script src="{{url_for('static', filename='js/three-utils.js')}}"></script>
   <script defer src="{{url_for('static', filename='js/script-three.js')}}"></script>
   <script defer src="{{url_for('static', filename='js/main.js')}}"></script>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script> -->
+
 </head>
 
 <body>
+
+  <script>
+    console.log(noise); // Check if noise is defined
+    let noiseValue1 = noise.simplex2(xFreq, yFreq); // Use the global `noise`
+
+  </script>
   <!-- <script type="text/javascript">
     $(document).ready(function() {
 
@@ -67,19 +81,19 @@
     });
     </script> -->
 
-    <h1>Speech Recognition</h1>
-    <br />
-    <button id="toggleListening">Start Listening</button>
-    <div>
-        <h3>Recognized Text:</h3>
-        <p id="recognizedText">No text recognized yet.</p>
-        <h3>Recipe:</h3>
-        <p id="recipeDetails">No recipe details available.</p>
-    </div>
-    <script src="{{ url_for('static', filename='js/speech_recognition.js') }}"></script>
+  <h1>Speech Recognition</h1>
+  <br />
+  <button id="toggleListening">Start Listening</button>
+  <div>
+    <h3>Recognized Text:</h3>
+    <p id="recognizedText">No text recognized yet.</p>
+    <h3>Recipe:</h3>
+    <p id="recipeDetails">No recipe details available.</p>
+  </div>
+  <script src="{{ url_for('static', filename='js/speech_recognition.js') }}"></script>
 
-    
-    <div id="container-three"></div>
+
+  <div id="container-three"></div>
   }
 </body>
 

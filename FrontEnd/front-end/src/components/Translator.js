@@ -31,15 +31,15 @@ const useSpeechRecognition = () => {
             console.log("text: ", _result)
             console.log("1: ", encodeURIComponent(_result))
 
-            fetch('http://127.0.0.1:5000/send_message_to_agent?message='+encodeURIComponent(_result))
-              // .then(response => response.json())
-              .then(data => {
-                console.log("d: ", data);
-                // var _data = "";
-                // console.log("d1: ", data.msg["ingredients"]);
-                // (data.msg["ingredients"]).map(d => {_data += Object.keys(d)[0] + d[Object.keys(d)[0]]})
-                // setRecipe(data)
-              });
+            fetch('http://127.0.0.1:5000/send_message_to_agent?message=' + encodeURIComponent(_result))
+                // .then(response => response.json())
+                .then(data => {
+                    console.log("d: ", data);
+                    // var _data = "";
+                    // console.log("d1: ", data.msg["ingredients"]);
+                    // (data.msg["ingredients"]).map(d => {_data += Object.keys(d)[0] + d[Object.keys(d)[0]]})
+                    // setRecipe(data)
+                });
         };
 
         recognition.onerror = (event) => {
@@ -66,14 +66,14 @@ const Translator = () => {
 
     return (
         <div>
-            <button onClick={() => {setIsListening(!isListening)}}>
+            <button onClick={() => { setIsListening(!isListening) }}>
                 {isListening ? "Stop Listening" : "Start Listening"}
             </button>
-            <div>
+            {/* <div>
                 <h3>Recognized Text:</h3>
                 <p>{text}</p>
                 <p>{recipe}</p>
-            </div>
+            </div> */}
         </div>
     );
 };

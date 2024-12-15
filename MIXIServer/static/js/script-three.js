@@ -18,7 +18,7 @@ let container, gui, stats;
 let scene, camera, renderer;
 let controls;
 let time, frame = 0;
-
+let noise;
 function initThree() {
   scene = new THREE.Scene();
 
