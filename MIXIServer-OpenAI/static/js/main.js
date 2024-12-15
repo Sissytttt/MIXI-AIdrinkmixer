@@ -88,7 +88,7 @@ function setupThree() {
   scene.add(pointCloud);
 
   // Gui
-  gui.add(params, "particleNum").listen();
+  // gui.add(params, "particleNum").listen();
 }
 
 function updateThree() {

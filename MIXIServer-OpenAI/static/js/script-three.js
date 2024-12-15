@@ -37,11 +37,11 @@ function initThree() {
 
   controls = new OrbitControls(camera, renderer.domElement);
 
-  gui = new dat.GUI();
+  // gui = new dat.GUI();
 
   stats = new Stats();
-  stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-  document.body.appendChild(stats.domElement);
+  // stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+  // document.body.appendChild(stats.domElement);
 
   setupThree(); // *** 
 

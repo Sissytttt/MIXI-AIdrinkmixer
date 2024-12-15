@@ -9,7 +9,7 @@ app.debug = True
 app.config['SECRET_KEY'] = 'secret!'
 
 client = OpenAI(
-    api_key="key",
+    api_key="",
 )
 
 instructions = """
