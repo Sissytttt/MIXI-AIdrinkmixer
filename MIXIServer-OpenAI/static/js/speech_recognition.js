@@ -75,10 +75,11 @@ function finalAnalyze() {
     }
 
     if (allTranscript.trim() !== "") {
-        fetch(`http://127.0.0.1:5000/send_message_to_agent?message=${encodeURIComponent(allTranscript)}`)
+        fetch(`http://127.0.0.1:5000/send_message_to_arduino?message=${encodeURIComponent(allTranscript)}`)
             .then(response => response.json())
             .then(data => {
                 console.log("FINAL RECIPE:", data["Recipe"]);
+                setTimeout(() => { convert = true }, 5000);
             })
             .catch(error => console.error("Error fetching response:", error));
     }

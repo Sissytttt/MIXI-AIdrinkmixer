@@ -1,16 +1,17 @@
 from flask import Flask, request, jsonify, render_template, g
 from openai import OpenAI
 import os
+import sys
 import time
 import json
+import serial
 
 app = Flask(__name__)
 app.debug = True
 app.config['SECRET_KEY'] = 'secret!'
 
 client = OpenAI(
-    api_key="",
-)
+    api_key="")
 
 instructions = """
 You are Mixi, a digital drink-making assistant designed to detect emotion in user’s input messages, convert emotions into their personalized drink recipes.You combine emotion recognition and recipe generation, conveying emotions through drink selections based on user inputs, helping users explore drinks that match their mood.
@@ -268,6 +269,8 @@ assistant = client.beta.assistants.create(
     response_format=response_format
 )
 thread = client.beta.threads.create()
+s = serial.Serial('/dev/tty.usbmodem101', 9600)
+s.timeout = 1
 
 def get_coffee_recipe(message):
     try:
@@ -309,6 +312,72 @@ def get_coffee_recipe(message):
     except Exception as e:
         return {"error": str(e)}
 
+def get_final_coffee_recipe(message):
+    try:
+        response = client.beta.threads.messages.create(
+            thread_id=thread.id,
+            role="user",
+            content=message
+        )
+        run = client.beta.threads.runs.create(
+            thread_id=thread.id,
+            assistant_id=assistant.id
+        )
+
+        while run.status != 'completed':
+            run = client.beta.threads.runs.retrieve(
+                thread_id=thread.id,
+                run_id=run.id
+            )
+            print(run.status)
+            time.sleep(1)
+
+
+        thread_messages = client.beta.threads.messages.list(thread.id)
+        print("*****: ", json.loads(thread_messages.data[0].content[0].text.value))
+        func_args = json.loads(thread_messages.data[0].content[0].text.value)
+        return func_args
+
+    except Exception as e:
+        return {"error": str(e)}
+
+def get_numbers(string):
+    numbers = ""
+    for char in string:
+        if char.isnumeric():
+            numbers += char
+    return map_number(int(numbers), 0, 100, 0, 10000)
+
+def map_number(value, from_min, from_max, to_min, to_max):
+    return (value - from_min) * (to_max - to_min) / (from_max - from_min) + to_min
+
+def get_drink(_data):
+    r_value = {"A": 3000, "B": 1000, "C": 5000, "D": 1000, "Soda": 0}
+    for d in _data:
+        if d["Ingredient_name"] == 'lime juice':
+            r_value["A"] = d["Proportion"]
+        if d["Ingredient_name"] == 'ginger':
+            r_value["B"] = d["Proportion"]
+        if d["Ingredient_name"] == 'coffee':
+            r_value["C"] = d["Proportion"]
+        if d["Ingredient_name"] == 'mango juice':
+            r_value["D"] = d["Proportion"]
+    return r_value
+
+
+        
+
+def serial_read():
+    print('Reading from Arduino over Serial. . .')
+    return
+
+def serial_write(data=None):
+    # Open Serial Port for Arduino
+    
+    print('Writing {} to Arduino over Serial. . .'.format(data))
+    s.write(data)
+    # s.write(data)
+
 
 @app.route("/send_message_to_agent", methods=['GET'])
 def send_message_to_agent():
@@ -317,9 +386,33 @@ def send_message_to_agent():
     res = get_coffee_recipe(request.args.get('message'))
     return res
 
+@app.route("/send_message_to_arduino", methods=['GET'])
+def send_message_to_arduino():
+    print("send_message_to_arduino")
+    print(request.args.get('message'))
+    res = get_final_coffee_recipe(request.args.get('message'))
+    print("res: ", res)
+    print("res Recipe: ", res["Recipe"])
+    print("res Recipe Ingredients: ", res["Recipe"]["Ingredients"])
+    _data = res["Recipe"]["Ingredients"]
+    # _data = {"A": get_numbers(_data[0]['Proportion']), "B": get_numbers(_data[1]['Proportion']), "C": get_numbers(_data[2]['Proportion']), "D": get_numbers(_data[3]['Proportion']), "Soda": 0, "Final": 10000}
+    _data = get_drink(_data)
+    print(json.dumps(_data).encode('utf-8'))
+    serial_write((json.dumps(_data) + '\n').encode())
+    print(s.readline().decode('utf-8').strip())
+    return res
+
 
 @app.route('/')
 def home():
+    return render_template('index.html')
+
+@app.route('/btn')
+def btn_on():
+    _data = {"A": 3000, "B": 1000, "C": 5000, "D": 1000, "Soda": 0}
+    print(json.dumps(_data).encode('utf-8'))
+    serial_write((json.dumps(_data) + '\n').encode())
+    _data = s.readline().decode('utf-8').strip()
     return render_template('index.html')
 
 # if __name__ == '__main__':
